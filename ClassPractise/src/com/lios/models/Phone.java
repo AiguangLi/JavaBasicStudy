@@ -34,4 +34,8 @@ public class Phone {
                 ", diskSize=" + diskSize +
                 '}';
     }
+
+    public void call() {
+        System.out.println("Phone calls!");
+    }
 }
