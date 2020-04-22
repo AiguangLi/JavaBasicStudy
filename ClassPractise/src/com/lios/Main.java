@@ -21,6 +21,10 @@ public class Main {
         callUsingPhone(androidPhone);
         callUsingPhone(defaultPhone);
 
+        //方法中传递的是引用，会直接修改对象的属性
+        changeApplePhoneName(iPhone, "iPhone X");
+        System.out.println(iPhone.toString());
+
         //类封装方法调用
         Light light = new Light();
         light.on();
@@ -31,5 +35,10 @@ public class Main {
 
     public static void callUsingPhone(Phone phone) {
         phone.call();
+    }
+
+    public static void changeApplePhoneName(ApplePhone phone, String newName) {
+        phone.setName(newName);
+        System.out.println(phone.toString());
     }
 }

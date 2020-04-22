@@ -12,4 +12,8 @@ public class ApplePhone extends Phone {
     public void call() {
         System.out.println("iPhone calls");
     }
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
 }

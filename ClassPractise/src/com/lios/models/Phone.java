@@ -4,9 +4,9 @@ package com.lios.models;
  * @author liaiguang
  */
 public class Phone {
-    private String name;
-    private float memory;
-    private float diskSize;
+    protected String name;
+    protected float memory;
+    protected float diskSize;
 
     public Phone(String name, float memory, float diskSize) {
         this.name = name;
