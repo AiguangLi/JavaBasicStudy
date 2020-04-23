@@ -4,12 +4,15 @@ import com.lios.models.AndroidPhone;
 import com.lios.models.ApplePhone;
 import com.lios.models.Light;
 import com.lios.models.Phone;
+import java.util.Date;
 
 /**
  * @author liaiguang
  */
 public class Main {
     public static void main(String[] args) {
+        System.out.println(new Date());
+
         ApplePhone iPhone = new ApplePhone("iPhone", 2.0f, 16);
         AndroidPhone androidPhone = new AndroidPhone("Huawei P40", 6.0f, 256);
         Phone defaultPhone = new Phone();
