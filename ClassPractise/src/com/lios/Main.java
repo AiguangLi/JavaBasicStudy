@@ -4,6 +4,9 @@ import com.lios.models.AndroidPhone;
 import com.lios.models.ApplePhone;
 import com.lios.models.Light;
 import com.lios.models.Phone;
+import com.lios.util.Range;
+
+import java.net.InterfaceAddress;
 import java.util.Date;
 
 /**
@@ -34,6 +37,18 @@ public class Main {
         light.brighten();
         light.dim();
         light.off();
+
+        integerObjCompare();
+
+        try {
+            int[] array = Range.produce(10, 20, 2, 5);
+            for (int i: array) {
+                System.out.println("array: " + i);
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+
     }
 
     public static void callUsingPhone(Phone phone) {
@@ -43,5 +58,15 @@ public class Main {
     public static void changeApplePhoneName(ApplePhone phone, String newName) {
         phone.setName(newName);
         System.out.println(phone.toString());
+    }
+
+    public static void integerObjCompare() {
+        Integer n1 = 47;
+        Integer n2 = 47;
+        String n3 = "2000";
+        String n4 = "2000";
+        //Integer内部有IntegerCache，范围[-128, 127]，这个范围的Integer对象相同值是共享对象的
+        System.out.println(n1.equals(n2));
+        System.out.println(n3.equals(n4));
     }
 }
