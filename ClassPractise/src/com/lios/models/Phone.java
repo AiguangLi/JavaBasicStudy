@@ -9,13 +9,31 @@ public class Phone {
     protected float diskSize;
 
     public Phone(String name, float memory, float diskSize) {
+        //通过this调用其他构造方法
+        this(name, memory);
+        this.diskSize = diskSize;
+    }
+
+    public Phone(String name, float memory) {
         this.name = name;
         this.memory = memory;
-        this.diskSize = diskSize;
     }
 
     public Phone() {
         //默认构造器，不做任何操作，用于验证默认参数设置
+    }
+
+    Phone(Phone anotherPhone) {
+        this.name = anotherPhone.name;
+        this.diskSize = anotherPhone.diskSize;
+        this.memory = anotherPhone.memory;
+
+        System.out.println("Get Phone in package Constructor");
+    }
+
+    public static Phone getPhoneCopy(Phone phoneToCopy) {
+        System.out.println("Get Phone Copy using package Constructor");
+        return new Phone(phoneToCopy);
     }
 
     //默认参数设置块

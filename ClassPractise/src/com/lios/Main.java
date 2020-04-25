@@ -1,12 +1,7 @@
 package com.lios;
 
-import com.lios.models.AndroidPhone;
-import com.lios.models.ApplePhone;
-import com.lios.models.Light;
-import com.lios.models.Phone;
+import com.lios.models.*;
 import com.lios.util.Range;
-
-import java.net.InterfaceAddress;
 import java.util.Date;
 
 /**
@@ -41,7 +36,7 @@ public class Main {
         integerObjCompare();
 
         try {
-            int[] array = Range.produce(10, 20, 2, 5);
+            int[] array = Range.range(10, 20, 2);
             for (int i: array) {
                 System.out.println("array: " + i);
             }
@@ -49,6 +44,16 @@ public class Main {
             System.out.println(e.toString());
         }
 
+        Book bookNormal = new Book(true);
+        bookNormal.checkIn();
+
+        Book bookAbnormal = new Book(true);
+        System.gc();
+
+        testPackageConstructor(iPhone);
+
+        PhoneStore store = new PhoneStore(androidPhone);
+        store.show();
     }
 
     public static void callUsingPhone(Phone phone) {
@@ -68,5 +73,12 @@ public class Main {
         //Integer内部有IntegerCache，范围[-128, 127]，这个范围的Integer对象相同值是共享对象的
         System.out.println(n1.equals(n2));
         System.out.println(n3.equals(n4));
+    }
+
+    public static void testPackageConstructor(Phone phone) {
+        //无法访问没有访问修饰符的类构造器，因为只能在相同的包里访问
+        //Phone defaultPackagePhone = new Phone(phone);
+        //通过这种方式可以隐藏某些构造方法不被外部访问，而只能通过别的方式访问
+        Phone copiedPhone = Phone.getPhoneCopy(phone);
     }
 }
