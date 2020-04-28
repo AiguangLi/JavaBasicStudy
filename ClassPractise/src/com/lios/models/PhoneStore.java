@@ -11,6 +11,17 @@ public class PhoneStore {
         phoneToSell = new Phone(phone);
     }
 
+    /**
+     * 基类对象可以协变转换为子类，从而以组合方式实现多态行为
+     */
+    public void changePhone() {
+        phoneToSell = new ApplePhone();
+    }
+
+    public void call() {
+        phoneToSell.call();
+    }
+
     public void show() {
         System.out.println(phoneToSell.toString());
     }

@@ -11,6 +11,15 @@ public class Main {
     public static void main(String[] args) {
         System.out.println(new Date());
 
+        ApplePhone defaultApplePhone = new ApplePhone();
+        AndroidPhone defaultAndroidPhone = new AndroidPhone();
+        // 以下代码会报错，因为提升到基类后，showName方法是私有的，编译器会检测出私有方法被调用
+        // Phone applePhone = new ApplePhone();
+        // applePhone.showName();
+        // 改成正常的子类后，可以调用。但是不建议重写基类私有方法。
+        ApplePhone applePhone = new ApplePhone();
+        applePhone.showName();
+
         ApplePhone iPhone = new ApplePhone("iPhone", 2.0f, 16);
         AndroidPhone androidPhone = new AndroidPhone("Huawei P40", 6.0f, 256);
         Phone defaultPhone = new Phone();
@@ -52,8 +61,13 @@ public class Main {
 
         testPackageConstructor(iPhone);
 
+        // 协变示例
         PhoneStore store = new PhoneStore(androidPhone);
         store.show();
+        store.call();
+        store.changePhone();
+        store.show();
+        store.call();
     }
 
     public static void callUsingPhone(Phone phone) {

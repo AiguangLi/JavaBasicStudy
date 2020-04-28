@@ -8,6 +8,10 @@ public class Phone {
     protected float memory;
     protected float diskSize;
 
+    private void showName() {
+        System.out.println("Private showName: " + name);
+    }
+
     public Phone(String name, float memory, float diskSize) {
         //通过this调用其他构造方法
         this(name, memory);
@@ -21,6 +25,7 @@ public class Phone {
 
     public Phone() {
         //默认构造器，不做任何操作，用于验证默认参数设置
+        System.out.println("Phone Default Constructor");
     }
 
     Phone(Phone anotherPhone) {
