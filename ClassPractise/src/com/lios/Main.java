@@ -13,10 +13,12 @@ public class Main {
 
         ApplePhone defaultApplePhone = new ApplePhone();
         AndroidPhone defaultAndroidPhone = new AndroidPhone();
-        // 以下代码会报错，因为提升到基类后，showName方法是私有的，编译器会检测出私有方法被调用
-        // Phone applePhone = new ApplePhone();
-        // applePhone.showName();
-        // 改成正常的子类后，可以调用。但是不建议重写基类私有方法。
+        /*
+         以下代码会报错，因为提升到基类后，showName方法是私有的，编译器会检测出私有方法被调用
+         Phone applePhone = new ApplePhone();
+         applePhone.showName();
+         改成正常的子类后，可以调用。但是不建议重写基类私有方法。
+        */
         ApplePhone applePhone = new ApplePhone();
         applePhone.showName();
 
