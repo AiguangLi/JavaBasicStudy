@@ -1,4 +1,4 @@
-package com.lios;
+package com.lios.singleton;
 
 /**
  * 饥饿方式单例模式：在获取前就已经初始化好了实例对象

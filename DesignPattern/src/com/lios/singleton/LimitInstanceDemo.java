@@ -1,4 +1,4 @@
-package com.lios;
+package com.lios.singleton;
 
 import java.util.ArrayList;
 import java.util.Random;

@@ -1,4 +1,4 @@
-package com.lios;
+package com.lios.singleton;
 
 /**
  * 懒加载方式的单例模式：可能存在线程安全问题，可以在getInstance()方法前加synchronized

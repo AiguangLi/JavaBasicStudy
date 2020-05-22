@@ -1,6 +1,4 @@
-import com.lios.HungrySingletonDemo;
-import com.lios.LazySingletonDemo;
-import com.lios.LimitInstanceDemo;
+package com.lios.singleton;
 
 /**
  * @author liaiguang
