@@ -1,5 +1,7 @@
 package com.lios.proxy;
 
+import java.lang.reflect.InvocationHandler;
+
 /**
  * @author liaiguang
  */
@@ -15,5 +17,14 @@ public class Example {
         player.login(player.account, player.password);
         player.playGame();
         player.upgrade();
+
+        //动态代理
+        Task task = new Task("测试");
+        InvocationHandler aopHandler = new AopInvocationHandler(task);
+        ITask aopProxy = DynamicProxy.newProxyInstance(task.getClass().getClassLoader(), task.getClass().getInterfaces(), aopHandler);
+        aopProxy.doTask();
+
+        Task task1 = new Task("测试1");
+        task1.doTask();
     }
 }
