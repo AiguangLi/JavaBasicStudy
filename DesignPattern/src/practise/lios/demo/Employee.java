@@ -20,10 +20,17 @@ public class Employee<T> {
         hireDate = LocalDate.of(_year, _month, _day);
     }
 
-    public void setId() {
-        this.id = nextId;
-        nextId ++;
+    {
+        //初始化的时候先创建了对象的内存地址，然后再调用块代码，之后才是调用构造函数初始化其他变量
+        //因此在块中可以获取this指向当前对象
+        id = nextId;
+        nextId++;
     }
+
+//    public void setId() {
+//        this.id = nextId;
+//        nextId ++;
+//    }
 
     public String getName() {
         return name;
@@ -53,7 +60,7 @@ public class Employee<T> {
 
         staff[1].raiseSalary("1000.23");
         for (Employee e : staff) {
-            e.setId();
+            //e.setId();
             Employee.showEmployee(e);
         }
 
