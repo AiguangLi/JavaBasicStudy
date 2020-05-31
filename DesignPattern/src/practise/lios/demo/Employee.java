@@ -2,6 +2,7 @@ package practise.lios.demo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -88,34 +89,34 @@ public class Employee {
     }
 
     public static void main(String[] args) {
-        var staff = new Employee[4];
-        staff[0] = new Employee("张三", "3421.12", 2020, 1, 1);
-        staff[1] = new Employee("李四", "6621.12", 2010, 4, 12);
-        staff[2] = new Employee("王五", "19921.22", 2005, 4, 12);
-        staff[3] = new Manager("经理", "15000", 2001, 4,5, "1000.00");
+        var staff = new ArrayList<Employee>(4);
+        staff.add(new Employee("张三", "3421.12", 2020, 1, 1));
+        staff.add(new Employee("李四", "6621.12", 2010, 4, 12));
+        staff.add(new Employee("王五", "19921.22", 2005, 4, 12));
+        staff.add(new Manager("经理", "15000", 2001, 4,5, "1000.00"));
 
-        staff[1].raiseSalary("1000.23");
-        staff[3].raiseSalary("500");
+        staff.get(1).raiseSalary("1000.23");
+        staff.get(3).raiseSalary("500");
         for (Employee e : staff) {
             //e.setId();
             Employee.showEmployee(e);
         }
 
-        System.out.println(staff[1].equals(staff[2]));
+        System.out.println(staff.get(1).equals(staff.get(2)));
 
         //按值传递影响成员
-        Employee.raiseEmployeeSalary(staff[2], "1024.01");
-        Employee.showEmployee(staff[2]);
+        Employee.raiseEmployeeSalary(staff.get(2), "1024.01");
+        Employee.showEmployee(staff.get(2));
 
         System.out.println("Before Swap: ");
-        Employee.showEmployee(staff[0]);
-        Employee.showEmployee(staff[1]);
+        Employee.showEmployee(staff.get(0));
+        Employee.showEmployee(staff.get(1));
 
         System.out.println("After Swap: ");
         // 交换实际没有发生，说明对象其实是按值传递的
-        Employee.swap(staff[0], staff[1]);
-        Employee.showEmployee(staff[0]);
-        Employee.showEmployee(staff[1]);
+        Employee.swap(staff.get(0), staff.get(1));
+        Employee.showEmployee(staff.get(0));
+        Employee.showEmployee(staff.get(1));
     }
 
     private static <T> void swap(T a, T b) {
