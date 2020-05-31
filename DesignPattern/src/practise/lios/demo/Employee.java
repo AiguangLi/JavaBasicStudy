@@ -2,22 +2,23 @@ package practise.lios.demo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * @author liaiguang
  * @created 2020/5/25
  */
-public class Employee<T> {
+public class Employee {
     private final String name;
     private BigDecimal salary;
     private final LocalDate hireDate;
     private static int nextId = 1;
     private int id = 0;
 
-    public Employee(String _name, String _salary, int _year, int _month, int _day) {
-        name = _name;
-        salary = new BigDecimal(_salary);
-        hireDate = LocalDate.of(_year, _month, _day);
+    public Employee(String name, String salary, int year, int month, int day) {
+        this.name = name;
+        this.salary = new BigDecimal(salary);
+        hireDate = LocalDate.of(year, month, day);
     }
 
     {
@@ -52,13 +53,49 @@ public class Employee<T> {
         salary = salary.add(new BigDecimal(salaryAdded));
     }
 
+    /**
+     * equals方法要求保持：
+     * 自反性：(自己=自己)
+     * 对称性：(y.equals(x)与x.equals(y)相同
+     * 传递性：y.equals(x), z.equals(y)如果都为true，则z.equals(x)也为true
+     * 一致性：如果x和y没有发生变化，则x.equals(y)结果是相同的。
+     * 非空引用，x.equals(null)应返回false
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        //要求两个类类名完全相同
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+
+        Employee other = (Employee) obj;
+        return other.name.equals(name) && other.salary.equals(salary) && other.hireDate.equals(hireDate);
+    }
+
+    @Override
+    public int hashCode() {
+        //默认从对象的存储地址中得出散列码（String类型因为是静态分配的，相同的字符串内容的String对象hashCode相同）
+        //两个相等的对象要求返回相同的hashCode
+        return Objects.hash(name, salary, hireDate);
+    }
+
     public static void main(String[] args) {
-        var staff = new Employee[3];
+        var staff = new Employee[4];
         staff[0] = new Employee("张三", "3421.12", 2020, 1, 1);
         staff[1] = new Employee("李四", "6621.12", 2010, 4, 12);
         staff[2] = new Employee("王五", "19921.22", 2005, 4, 12);
+        staff[3] = new Manager("经理", "15000", 2001, 4,5, "1000.00");
 
         staff[1].raiseSalary("1000.23");
+        staff[3].raiseSalary("500");
         for (Employee e : staff) {
             //e.setId();
             Employee.showEmployee(e);
@@ -97,14 +134,20 @@ public class Employee<T> {
     }
 
     private static void showEmployee(Employee employee) {
-        String result = "id: " + employee.id +
-                "\nname: " + employee.name +
-                "\nhireDate: " + employee.hireDate +
-                "\nsalary: " + employee.salary;
-        System.out.println(result);
+        System.out.println(employee.toString());
     }
 
-    public boolean equals(Employee anotherEmployee) {
+    @Override
+    public String toString() {
+        return getClass().getName() +
+                "\nhashCode: " + hashCode() +
+                "\nid: " + id +
+                "\nname: " + name +
+                "\nhireDate: " + hireDate +
+                "\nsalary: " + getSalary();
+    }
+
+    public boolean sameName(Employee anotherEmployee) {
         //同一类中可以访问相同类的私有成员，如这里的anotherEmployee.name
         return this.name.equals(anotherEmployee.name);
     }
