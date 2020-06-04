@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class EnumTest {
     public static void main(String[] args) {
         var in = new Scanner(System.in);
-        System.out.println("Input a size (SMALL, MEDIUM, LARGE, EXTRA_LARGE)");
+        System.out.println("Input a size (SMALL, MEDIUM, LARGE, EXTRA_LARGE): ");
         String input = in.next().toUpperCase();
 
         try {
@@ -19,6 +19,8 @@ public class EnumTest {
             if (size == Size.EXTRA_LARGE) {
                 System.out.println("XL Selected");
             }
+
+            size.handle();
         } catch (IllegalArgumentException e) {
             System.out.println(e.toString());
         }
@@ -37,10 +39,34 @@ enum Size {
      * LARGE: L
      * EXTRA_LARGE: XL
      */
-    SMALL("S"),
-    MEDIUM("M"),
-    LARGE("L"),
-    EXTRA_LARGE("XL");
+    SMALL("S") {
+        @Override
+        void handle() {
+            System.out.println("Small Handler");
+        }
+    },
+    MEDIUM("M") {
+        @Override
+        void handle() {
+            System.out.println("Medium Handler");
+        }
+    },
+    LARGE("L") {
+        @Override
+        void handle() {
+            System.out.println("Large Handler");
+        }
+    },
+    EXTRA_LARGE("XL") {
+        @Override
+        void handle() {
+            System.out.println("ExtraLarge Handler");
+        }
+    };
+
+    void handle() {
+        System.out.println("Basic Handler");
+    }
 
     private final String abbreviation;
     private Size(String abbreviation) {this.abbreviation = abbreviation;}

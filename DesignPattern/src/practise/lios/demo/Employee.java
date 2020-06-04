@@ -1,25 +1,33 @@
 package practise.lios.demo;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author liaiguang
  * @created 2020/5/25
  */
-public class Employee {
+public class Employee implements Comparable<Employee>, Cloneable {
     private final String name;
     private BigDecimal salary;
     private final LocalDate hireDate;
     private static int nextId = 1;
     private int id = 0;
+    private Date leaveDate;
+
+//    public Employee() {
+//        this.name = "-";
+//        this.salary = new BigDecimal("0.00");
+//        hireDate = LocalDate.of(1970, 1, 1);
+//    }
 
     public Employee(String name, String salary, int year, int month, int day) {
         this.name = name;
         this.salary = new BigDecimal(salary);
         hireDate = LocalDate.of(year, month, day);
+        leaveDate = new Date();
     }
 
     {
@@ -51,7 +59,14 @@ public class Employee {
     }
 
     public void raiseSalary(String salaryAdded) {
+        //BigDecimal每次add返回的是一个新对象，因此不影响拷贝操作（拷贝对象的修改值不影响原对象的值）
         salary = salary.add(new BigDecimal(salaryAdded));
+    }
+
+    public void modifyLeaveDate(int year, int month, int day) {
+        Date newLeaveDate = new GregorianCalendar(year, month - 1, day).getTime();
+
+        leaveDate.setTime(newLeaveDate.getTime());
     }
 
     /**
@@ -88,18 +103,49 @@ public class Employee {
         return Objects.hash(name, salary, hireDate);
     }
 
-    public static void main(String[] args) {
+    @Override
+    public Employee clone() throws CloneNotSupportedException {
+        //浅拷贝会导致leaveDate被克隆对象修改
+        //谨慎使用clone方法，因为子类行为无法预测
+        //return (Employee)super.clone();
+        Employee cloned = (Employee) super.clone();
+
+        //深拷贝需要拷贝非基本类型，以及非final对象
+        cloned.leaveDate = (Date) leaveDate.clone();
+
+        return cloned;
+    }
+
+    public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, CloneNotSupportedException {
         var staff = new ArrayList<Employee>(4);
         staff.add(new Employee("张三", "3421.12", 2020, 1, 1));
         staff.add(new Employee("李四", "6621.12", 2010, 4, 12));
         staff.add(new Employee("王五", "19921.22", 2005, 4, 12));
-        staff.add(new Manager("经理", "15000", 2001, 4,5, "1000.00"));
+        staff.add(new Manager("经理", "15000", 2001, 4, 5, "1000.00"));
 
         staff.get(1).raiseSalary("1000.23");
         staff.get(3).raiseSalary("500");
+        System.out.println("============Before Sort=============");
         for (Employee e : staff) {
             //e.setId();
             Employee.showEmployee(e);
+        }
+
+        //数组不可以强制转换，但单个元素可以转换
+        Object[] employees = staff.toArray();
+        Arrays.sort(employees);
+        System.out.println("===============After Sort==============");
+        for (Object e : employees) {
+            Employee.showEmployee((Employee) e);
+        }
+
+        Employee[] employeeArray = new Employee[staff.size()];
+        employeeArray = staff.toArray(employeeArray);
+        //lambda实现排序，Arrays.sort需要能够推断出比较对象的类型，因此需要将ArrayList<Employee>转成Employee[]。
+        Arrays.sort(employeeArray, (Employee e1, Employee e2) -> e1.salary.compareTo(e2.salary));
+        System.out.println("==============After Lambda Sort=============");
+        for (Object e : employeeArray) {
+            Employee.showEmployee((Employee) e);
         }
 
         System.out.println(staff.get(1).equals(staff.get(2)));
@@ -117,6 +163,36 @@ public class Employee {
         Employee.swap(staff.get(0), staff.get(1));
         Employee.showEmployee(staff.get(0));
         Employee.showEmployee(staff.get(1));
+
+        //反射
+        Class<Employee> employeeClass = Employee.class;
+        //调用指定构造函数需要指定getConstructor的参数的class
+        Employee reflectEmployee =
+                employeeClass
+                        .getConstructor(String.class, String.class, int.class, int.class, int.class)
+                        .newInstance("王可", "1000", 2010, 1, 1);
+        showEmployee(reflectEmployee);
+
+        // 不推荐使用forName的反射
+        try {
+            Class<Employee> employeeNameClass = (Class<Employee>) Class.forName("practise.lios.demo.Employee");
+            Employee reflectNameEmployee = (Employee) employeeNameClass.getConstructor(String.class, String.class, int.class, int.class, int.class)
+                    .newInstance("刘明", "1000", 2012, 1, 1);
+            showEmployee(reflectNameEmployee);
+        } catch (ClassNotFoundException | InstantiationException e) {
+            System.out.println(e.toString());
+        }
+
+
+        Employee clonedEmployee = staff.get(2).clone();
+        System.out.println("Before Clone Operation:");
+        showEmployee(staff.get(2));
+        clonedEmployee.modifyLeaveDate(2020, 2, 1);
+        System.out.println("After Clone Operation:");
+        showEmployee(staff.get(2));
+        System.out.println("Cloned Employee:");
+        showEmployee(clonedEmployee);
+
     }
 
     private static <T> void swap(T a, T b) {
@@ -127,7 +203,8 @@ public class Employee {
 
     /**
      * 对象为值传递，但是在方法内部改变对象成员变量会影响对象的成员变量
-     * @param employee: Employee
+     *
+     * @param employee:    Employee
      * @param addedSalary: String
      */
     private static void raiseEmployeeSalary(Employee employee, String addedSalary) {
@@ -145,11 +222,18 @@ public class Employee {
                 "\nid: " + id +
                 "\nname: " + name +
                 "\nhireDate: " + hireDate +
-                "\nsalary: " + getSalary();
+                "\nsalary: " + getSalary() +
+                "\nleaveDate: " + leaveDate;
     }
 
     public boolean sameName(Employee anotherEmployee) {
         //同一类中可以访问相同类的私有成员，如这里的anotherEmployee.name
         return this.name.equals(anotherEmployee.name);
+    }
+
+    //使用final不让子类覆盖，以免修改行为导致无法满足里氏替换原则
+    @Override
+    public final int compareTo(Employee e) {
+        return salary.compareTo(e.salary);
     }
 }
