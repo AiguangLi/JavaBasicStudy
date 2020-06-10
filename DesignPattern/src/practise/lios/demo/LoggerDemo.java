@@ -3,7 +3,6 @@ package practise.lios.demo;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -17,14 +16,25 @@ public class LoggerDemo {
     private static final Logger myLogger = Logger.getLogger("practise.lios.demo.LoggerDemo");
     public static void main(String[] args) throws IOException {
         //修改默认的Logger配置文件，支持打印Info以下级别日志。
-        String loggingProperties = System.getProperty("user.dir")+"/DesignPattern/src/logging.properties";
-        System.setProperty("java.util.logging.config.file", loggingProperties);
-        LogManager.getLogManager().readConfiguration();
+//        String loggingProperties = System.getProperty("user.dir")+"/DesignPattern/src/logging.properties";
+//        System.setProperty("java.util.logging.config.file", loggingProperties);
+//        LogManager.getLogManager().readConfiguration();
+        //不使用默认的日志处理器，使用文件处理日志
+        myLogger.setUseParentHandlers(false);
+        //文件默认在用户根目录下
+        //FileHandler fileHandler = new FileHandler();
+        //fileHandler.setFormatter();
+        WindowHandler handler = new WindowHandler();
+        handler.setFormatter(new LogTextFormatter());
+        myLogger.addHandler(handler);
         int loopNumber = 10;
-        myLogger.setLevel(Level.ALL);
+        myLogger.setLevel(Level.INFO);
         for (int i = 0; i < loopNumber; ++i) {
             if (i == 5) {
+                //被LogFilter过滤掉了
                 myLogger.info("i=5");
+            } else {
+                myLogger.info("Log i=" + i);
             }
         }
 
