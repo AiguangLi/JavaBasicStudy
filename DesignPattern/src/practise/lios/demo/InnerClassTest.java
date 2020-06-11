@@ -23,9 +23,20 @@ public class InnerClassTest {
         timer.start();
 
         double[] doubles = new Random(47).doubles(0, 1000).limit(10).toArray();
-        ArrayAlgorithm.Pair pair = ArrayAlgorithm.minMax(doubles);
+        Double[] doublesOfT = new Double[doubles.length];
+        int index = 0;
+        for (double d:doubles) {
+            doublesOfT[index++] = d;
+        };
+
+        ArrayAlgorithm.Pair<Double> pair = ArrayAlgorithm.minMax(doublesOfT);
         System.out.println(Arrays.toString(doubles));
         System.out.println("Min: " + pair.getFirst() + "\tMax: " + pair.getSecond());
+
+        String[] strings = new String[] {"a", "c", "bgd", "eda", "aeff"};
+        ArrayAlgorithm.Pair<String> pairString = ArrayAlgorithm.minMax(strings);
+        System.out.println(Arrays.toString(strings));
+        System.out.println("Min: " + pairString.getFirst() + "\tMax: " + pairString.getSecond());
 
         JOptionPane.showMessageDialog(null, "退出程序？");
         System.exit(0);
