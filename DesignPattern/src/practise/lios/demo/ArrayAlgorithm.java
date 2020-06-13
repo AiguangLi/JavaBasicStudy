@@ -10,8 +10,13 @@ public class ArrayAlgorithm {
      * 但可以封装对象返回多个值，且避免类名重名
      */
     public static class Pair<T> {
-        private final T first;
-        private final T second;
+        private T first;
+        private T second;
+
+        public Pair() {
+            first = null;
+            second = null;
+        }
 
         public Pair(T first, T second) {
             this.first = first;
@@ -24,6 +29,14 @@ public class ArrayAlgorithm {
 
         public T getSecond() {
             return second;
+        }
+
+        public void setFirst(T value) {
+            first = value;
+        }
+
+        public void setSecond(T value) {
+            second = value;
         }
     }
 

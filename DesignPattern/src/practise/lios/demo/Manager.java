@@ -8,7 +8,7 @@ import java.util.Objects;
  * @created 2020/5/31
  */
 public class Manager extends Employee {
-    BigDecimal bonus;
+    private final BigDecimal bonus;
 
     public Manager(String name, String salary, int year, int month, int day, String bonus) {
         //调用super的构造函数初始化父类已有的成员变量
@@ -23,6 +23,10 @@ public class Manager extends Employee {
         BigDecimal salaryWithBonus = baseSalary.add(bonus);
 
         return salaryWithBonus.toString();
+    }
+
+    public BigDecimal getBonus() {
+        return bonus;
     }
 
 
