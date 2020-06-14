@@ -13,15 +13,16 @@ public class GenericDemo {
         printBuddies(buddies);
 
         Manager[] managers = {ceo, cto};
-        ArrayAlgorithm.Pair<Employee> result = new ArrayAlgorithm.Pair<>();
+        ArrayAlgorithm.Pair<Employee> minMaxResult = new ArrayAlgorithm.Pair<>();
 
-        minMaxBonus(managers, result);
-        System.out.println("first: " + result.getFirst().getName() + ", second: "
-                + result.getSecond().getName());
+        minMaxBonus(managers, minMaxResult);
+        System.out.println("first: " + minMaxResult.getFirst().getName() + ", second: "
+                + minMaxResult.getSecond().getName());
 
-        swap(result);
-        System.out.println("After swap, first: " + result.getFirst().getName() + ", second: "
-                + result.getSecond().getName());
+        ArrayAlgorithm.Pair<Employee> maxMinResult = new ArrayAlgorithm.Pair<>();
+        maxMinBonus(managers, maxMinResult);
+        System.out.println("After swap, first: " + maxMinResult.getFirst().getName() + ", second: "
+                + maxMinResult.getSecond().getName());
 
     }
 
