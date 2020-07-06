@@ -65,6 +65,16 @@ public class CreatingStreams {
         Stream<String> songs = Stream.of("gently", "down", "the", "stream");
         show("song", songs);
 
+        Stream<String> mapString = Stream.of("gently", "down", "the", "stream").map(String::toUpperCase);
+        show("mapString", mapString);
+
+        Stream<String> wordsStream = new Scanner(contents).tokens();
+        Stream<String> flatMapStream = wordsStream.flatMap(CreatingStreams::codePoints);
+        show("flatMapStream", flatMapStream);
+
+        Stream<String> sortedString = Stream.of("gently", "down", "the", "stream").map(String::toUpperCase).sorted(Comparator.comparingInt(String::length));
+        show("sortedString", sortedString);
+
         Stream<String> silence = Stream.empty();
         show("silence", silence);
 
