@@ -1,8 +1,6 @@
 package practise.lios.demo.streams;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,6 +52,51 @@ public class StreamSummary {
         //按长度对单词进行排序后反序
         Stream<String> words5 = Pattern.compile("\\PL+").splitAsStream(sentences).sorted(Comparator.comparing(String::length).reversed());
         show("PatterStream4", words5);
+
+        //获取单词的数量
+        long wordsCount = Pattern.compile("\\PL+").splitAsStream(sentences).filter(s -> s.length() > 2).count();
+        System.out.println("Number of words length greater than 2: " + wordsCount);
+
+        //获取最长的单词
+        Optional<String> longestWord = Pattern.compile("\\PL+").splitAsStream(sentences).max(Comparator.comparing(String::length));
+        System.out.println("longestWord: " + longestWord.orElse("null"));
+
+        //获取最短的单词
+        Optional<String> shortestWord = Pattern.compile("\\PL+").splitAsStream(sentences).min(Comparator.comparing(String::length));
+        System.out.println("shortestWord: " + shortestWord.orElse("null"));
+
+        //获取第一个以h开头的单词
+        Optional<String> firstWordsStartWithH = Pattern.compile("\\PL+").splitAsStream(sentences)
+                .filter(s -> s.toLowerCase().startsWith("h")).findFirst();
+        System.out.println("firstWordsStartWithH: " + firstWordsStartWithH.orElse("Not Found"));
+
+        //获取任何一个以h开头的单词
+        Optional<String> anyWordsStartWithH = Pattern.compile("\\PL+").splitAsStream(sentences)
+                .filter(s -> s.toLowerCase().startsWith("h")).findAny();
+        System.out.println("anyWordsStartWithH: " + anyWordsStartWithH.orElse("Not Found"));
+
+        //查找其中是否有was这个单词
+        boolean hasWas = Pattern.compile("\\PL+").splitAsStream(sentences).anyMatch("was"::equals);
+        System.out.println("hasWas: " + hasWas);
+
+        //查找其中全部是was这个单词
+        boolean allWas = Pattern.compile("\\PL+").splitAsStream(sentences).allMatch("was"::equals);
+        System.out.println("allWas: " + allWas);
+
+        //使用forEach方法打印全部单词的大写
+        Pattern.compile("\\PL+").splitAsStream(sentences).map(String::toUpperCase).forEach(System.out::print);
+
+        //将流转为Collection
+        List<String> wordsList = Pattern.compile("\\PL+").splitAsStream(sentences).collect(Collectors.toList());
+        System.out.println("wordsList: " + wordsList);
+
+        //将流转为数组
+        String[] wordsArray = Pattern.compile("\\PL+").splitAsStream(sentences).toArray(String[]::new);
+        System.out.println("wordsArray: " + Arrays.toString(wordsArray));
+
+        //将流拼接为字符串
+        String wordsToSentences = Pattern.compile("\\PL+").splitAsStream(sentences).collect(Collectors.joining(", "));
+        System.out.println("wordsToSentences: " + wordsToSentences);
     }
 
     public static<T> void show(String title, Stream<T> stream) {
