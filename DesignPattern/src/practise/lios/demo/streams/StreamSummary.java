@@ -1,6 +1,7 @@
 package practise.lios.demo.streams;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,6 +11,57 @@ import java.util.stream.Stream;
  * @date 2020/7/16
  */
 public class StreamSummary {
+    public static class User {
+        private String name;
+        private int id;
+        //1=male, 0 = female, 2= unknown
+        private int sex = 2;
+
+        public User(int id, String name, int sex) {
+            this.id = id;
+            this.name = name;
+            if (sex == 0 || sex == 1) {
+                this.sex = sex;
+            }
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getSex() {
+            return sex;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            User user = (User) o;
+            return id == user.id &&
+                    sex == user.sex &&
+                    name.equals(user.name);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, id, sex);
+        }
+
+        @Override
+        public String toString() {
+            return "User{id = " + id + ", name = " + name + ", sex = " + sex + "}";
+        }
+    }
+
     public static void main(String[] args) {
         //从Collection中产生流
         ArrayList<String> strings = new ArrayList<>();
@@ -97,9 +149,42 @@ public class StreamSummary {
         //将流拼接为字符串
         String wordsToSentences = Pattern.compile("\\PL+").splitAsStream(sentences).collect(Collectors.joining(", "));
         System.out.println("wordsToSentences: " + wordsToSentences);
+
+        IntSummaryStatistics lengthSummary = Pattern.compile("\\PL+").splitAsStream(sentences).
+                collect(Collectors.summarizingInt(String::length));
+        System.out.println("Longest word length: " + lengthSummary.getMax());
+        System.out.println("Shortest word length: " + lengthSummary.getMin());
+        System.out.println("Average word length: " + lengthSummary.getAverage());
+
+        //映射为id -> User格式
+        Map<Integer, User> userMap = userStream().collect(Collectors.toMap(User::getId, Function.identity()));
+        for (Integer key:userMap.keySet()) {
+            System.out.println("id " + key + ": " + userMap.get(key));
+        }
+
+        //映射为id -> User.name格式
+        Map<Integer, String> idToNameMap = userStream().collect(Collectors.toMap(User::getId, User::getName));
+        System.out.println(idToNameMap);
+
+        //按性别分组
+        Map<Integer, Set<User>> sexToUserMap = userStream().collect(Collectors.groupingBy(User::getSex, Collectors.toSet()));
+        for (Integer key:sexToUserMap.keySet()) {
+            Set<User> usersOfSex = sexToUserMap.get(key);
+            System.out.println("Sex " + key + ": " + usersOfSex);
+        }
     }
 
-    public static<T> void show(String title, Stream<T> stream) {
+    public static Stream<User> userStream() {
+        return Stream.of(
+                new User(1, "Box", 1),
+                new User(2, "Succi", 0),
+                new User(3, "Lily", 0),
+                new User(4, "Sara", 0),
+                new User(5, "Mark", 1)
+        );
+    }
+
+    public static <T> void show(String title, Stream<T> stream) {
         final int size = 10;
         List<T> array = stream.limit(size).collect(Collectors.toList());
         System.out.println(title + ": ");
