@@ -50,6 +50,10 @@ public class Employee implements Comparable<Employee>, Cloneable {
         return salary.toString();
     }
 
+    public LocalDate getHireDate() {
+        return hireDate;
+    }
+
     public String hireDate() {
         return hireDate.toString();
     }
