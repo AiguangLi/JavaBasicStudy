@@ -1,5 +1,7 @@
 package practise.lios.demo;
 
+import practise.lios.demo.io.SerialCloneable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,7 +11,7 @@ import java.util.*;
  * @author liaiguang
  * @created 2020/5/25
  */
-public class Employee implements Comparable<Employee>, Cloneable {
+public class Employee extends SerialCloneable implements Comparable<Employee> {
     private final String name;
     private BigDecimal salary;
     private final LocalDate hireDate;
@@ -107,18 +109,18 @@ public class Employee implements Comparable<Employee>, Cloneable {
         return Objects.hash(name, salary, hireDate);
     }
 
-    @Override
-    public Employee clone() throws CloneNotSupportedException {
-        //浅拷贝会导致leaveDate被克隆对象修改
-        //谨慎使用clone方法，因为子类行为无法预测
-        //return (Employee)super.clone();
-        Employee cloned = (Employee) super.clone();
-
-        //深拷贝需要拷贝非基本类型，以及非final对象
-        cloned.leaveDate = (Date) leaveDate.clone();
-
-        return cloned;
-    }
+//    @Override
+//    public Employee clone() throws CloneNotSupportedException {
+//        //浅拷贝会导致leaveDate被克隆对象修改
+//        //谨慎使用clone方法，因为子类行为无法预测
+//        //return (Employee)super.clone();
+//        Employee cloned = (Employee) super.clone();
+//
+//        //深拷贝需要拷贝非基本类型，以及非final对象
+//        cloned.leaveDate = (Date) leaveDate.clone();
+//
+//        return cloned;
+//    }
 
     public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, CloneNotSupportedException {
         var staff = new ArrayList<Employee>(4);
@@ -188,7 +190,7 @@ public class Employee implements Comparable<Employee>, Cloneable {
         }
 
 
-        Employee clonedEmployee = staff.get(2).clone();
+        Employee clonedEmployee = (Employee) staff.get(2).clone();
         System.out.println("Before Clone Operation:");
         showEmployee(staff.get(2));
         clonedEmployee.modifyLeaveDate(2020, 2, 1);

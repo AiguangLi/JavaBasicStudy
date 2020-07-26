@@ -9,6 +9,7 @@ import java.util.Objects;
  */
 public class Manager extends Employee {
     private final BigDecimal bonus;
+    private Employee secretary;
 
     public Manager(String name, String salary, int year, int month, int day, String bonus) {
         //调用super的构造函数初始化父类已有的成员变量
@@ -51,5 +52,13 @@ public class Manager extends Employee {
     @Override
     public String toString() {
         return super.toString() + "\nbonus: " + bonus;
+    }
+
+    public Employee getSecretary() {
+        return secretary;
+    }
+
+    public void setSecretary(Employee secretary) {
+        this.secretary = secretary;
     }
 }
