@@ -8,6 +8,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 /**
  * @author liaiguang
@@ -68,6 +69,9 @@ public class FilesBasic {
 
             Files.delete(outputDirectory);
         }
+
+        Path anotherPath = Paths.get("./DesignPattern/src/practise/lios/demo");
+        showSubPath(anotherPath);
     }
 
     public static void showFileInfo(Path path) throws IOException {
@@ -103,6 +107,29 @@ public class FilesBasic {
                 System.out.println("File last modified at: " + attributes.lastModifiedTime());
                 System.out.println("File last accessed at: " + attributes.lastAccessTime());
             }
+        }
+    }
+
+    public static void showSubPath(Path path) throws IOException {
+        try (Stream<Path> entries = Files.list(path)) {
+            entries.forEach(p -> {
+                if (Files.isDirectory(p)) {
+                    System.out.println("Directory: " + p);
+                } else {
+                    System.out.println("File: " + p);
+                }
+            });
+        }
+
+        System.out.println("-------------Files.walk--------------");
+        try (Stream<Path> entries = Files.walk(path)) {
+            entries.forEach(p -> {
+                if (Files.isDirectory(p)) {
+                    System.out.println("Directory: " + p);
+                } else {
+                    System.out.println("File: " + p);
+                }
+            });
         }
     }
 }
