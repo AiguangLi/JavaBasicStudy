@@ -30,11 +30,20 @@ public class SocketThreadHandler implements Runnable {
             out.println("Hello! Enter BYE to exit.");
 
             boolean done = false;
+            int halfCloseCount = 0;
             while (!done && in.hasNextLine()) {
                 String line = in.nextLine();
                 out.println("Received: " + line);
                 if ("BYE".equals(line.trim())) {
                     done = true;
+                }
+                if (halfCloseCount >= 5) {
+                    out.println("No more output!");
+                    if (! incoming.isOutputShutdown()) {
+                        incoming.shutdownOutput();  //关闭输出流
+                    }
+                } else {
+                    halfCloseCount++;
                 }
                 Thread.sleep(50);
             }
